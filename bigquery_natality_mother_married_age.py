@@ -2,6 +2,7 @@
 # dataset TableID: bigquery-public-data:samples.natality
 
 #mother's age and marital status at childbirth
+
 from google.cloud import bigquery
 import matplotlib.pyplot as plt
 import os
@@ -28,7 +29,8 @@ marr_status_age.plot(x='mother_age',figsize=[16,6], linewidth=5)
 
 #------------------------------------
 
-# mother's marital status vs age visualized in a bar chart
+# mother's marital status vs age visualized in a bar plot
+
 from google.cloud import bigquery
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -40,9 +42,7 @@ cl = bigquery.Client()
 
 QUERY='''
 SELECT
-    mother_age,COUNT(1) as count,mother_married
-    --SUM(CASE WHEN mother_married THEN 1 ELSE 0 END) AS married,
-    --SUM(CASE WHEN mother_married THEN 0 ELSE 1 END) AS not_married
+    mother_age,COUNT(1) as count, mother_married
 FROM `bigquery-public-data.samples.natality`
 WHERE mother_age IS NOT NULL
 GROUP BY mother_age,mother_married
