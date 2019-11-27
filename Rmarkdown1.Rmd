@@ -1,0 +1,80 @@
+---
+title: "R downloads data"
+from: "1/10/2019"
+output: html_document
+---
+## Expert Data Analysis with R
+```{r ustawienia, echo=FALSE, results='hide'}
+library(dplyr)
+library(EDAWR)
+library(data.table) 
+library(R.oo)
+library(R.utils) # needed for fread()
+```
+Loading the file using fread function:
+```{r file_load, echo=FALSE, results='hide'}
+df <- fread('~/Documents/R/Rdatafiles/2019-10-01-r.csv.gz')
+```
+tbl_df function - a kind of data frame 
+```{r tibble, echo=FALSE}
+tbl <- tbl_df(df) 
+```
+```{r data dimention, echo=FALSE}
+dim(tbl) 
+```
+Grouping data, printing head
+```{r group_by, echo=FALSE}
+  by_country <- group_by(tbl,country)
+  by_country
+```
+Summarizing
+```{r summary, echo=FALSE}
+   pack_sum <- summarize(by_country, count = n(), 
+	 unique=n_distinct(ip_id), countries=n_distinct(country))
+   pack_sum
+```
+Data structure:
+```{r structure, echo=FALSE}
+   str(pack_sum)
+```
+count median
+```{r median of count variable, echo=FALSE}
+median(pack_sum$count, na.rm=TRUE)
+```
+unique median
+```{r median of unique variable, echo=FALSE}
+median(pack_sum$unique, na.rm=TRUE)
+```
+count mean
+```{r mean of count variable, echo=FALSE}
+mean(pack_sum$count, na.rm=TRUE)
+```
+count mean
+```{r mean of unique variable, echo=FALSE}
+mean(pack_sum$unique, na.rm=TRUE)
+```
+quantile
+```{r quantile of count, echo=FALSE}
+quantile(pack_sum$count)
+```
+Top counts of R downloads per country
+```{r top counts, echo=FALSE}
+top_counts <- filter(pack_sum, count > 11)
+top_counts
+```
+Sorted top counts
+```{r sorted, echo=FALSE}
+top_counts_sorted <- arrange(top_counts, desc(count))
+top_counts_sorted
+```
+quantile of uniques:
+```{r quantile, echo=FALSE}
+quantile(pack_sum$unique)
+```
+Top unique - downloads from 1 computer counted as 1
+```{r uniques sorted, echo=FALSE}
+top_uniques <- filter(pack_sum, unique > 15)
+top_uniques_sort <- arrange(top_uniques, desc(unique)) 
+top_uniques_sort
+```
+On October 1st 2019 there were total of 2922 downloads of R programming language, or 1348 by individual users. The top country from which downloads were recorded was US, second was Great Britain, third was Japan.
