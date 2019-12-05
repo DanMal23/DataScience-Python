@@ -1,0 +1,177 @@
+---
+title: "lattice_mlmRev_other"
+output: html_document
+---
+
+```{r setup, echo=FALSE}
+library(knitr)
+library(mlmRev)
+library(lattice)
+```
+## data from package ‘mlmRev’
+
+'bdf' data frame -  language  scores  from  grade  8  pupils  inelementary schools in The Netherlands:
+head - first 6 rows:
+```{r bdf package head, echo=FALSE}
+head(bdf)
+```
+bdf data frame dimention, structure, summary:
+```{r bdf dim, echo=FALSE}
+dim(bdf)
+str(bdf)
+```
+
+Data frame dimention, structure, summary:
+```{r bdf summary, echo=FALSE}
+summary(bdf)
+```
+Histogram of socioeconomic status of the pupils:
+```{r ses_hist, echo=FALSE}
+library(lattice)
+histogram(~ ses, data = bdf)
+```
+Histogram of sex of the students:
+```{r sex_hist, echo=FALSE}
+library(lattice)
+histogram(~ sex, data = bdf)
+```
+Barchart of socio econ stat, gender & langPRET
+```{r sex_barchart, echo=FALSE}
+barchart(ses ~ langPRET | sex, bdf)
+```
+Dotplot
+```{r sex_dotplot1, echo=FALSE}
+dotplot(ses ~ langPRET | sex, bdf)
+```
+
+```{r sex_dotplot2, echo=FALSE}
+ dotplot( langPRET ~ ses, data = bdf, groups = sex, type = "o",
+auto.key = list(space = "right", points = TRUE, lines = TRUE))
+```
+
+```{r xyplot1, echo=FALSE}
+ xyplot(ses ~ langPRET, data=bdf)
+```
+
+
+```{r xyplot2, echo=FALSE}
+xyplot(ses ~ langPRET, data=bdf, scales = list(log = TRUE),
+type = c("p", "g", "smooth"))
+```
+
+```{r sex_barchart2, echo=FALSE}
+barchart(ses ~ IQ.verb | sex, bdf)
+```
+
+egsingle data set - mathematics score
+```{r egsingle info, echo=FALSE}
+dim(egsingle)
+names(egsingle)
+```
+
+Year of the test ~ student's grade
+```{r hist1, echo=FALSE}
+histogram(year ~ grade | factor(female), data=egsingle)
+```
+
+```{r histo2, echo=FALSE}
+histogram(~ grade | factor(year), egsingle, groups=female)
+```
+
+
+```{r dp1, echo=FALSE}
+densityplot(~ year | factor(female), egsingle, groups=grade,
+            plot.points=FALSE, auto.key=TRUE)
+```
+
+```{r dp2, echo=FALSE}
+densityplot(~ grade | factor(year), egsingle, groups=female,
+            plot.points=FALSE, auto.key=TRUE)
+```
+
+```{r histo3, echo=FALSE}
+histogram(~ grade | factor(black), data=egsingle)
+```
+
+```{r bar_gender, echo=FALSE}
+barchart(year ~ grade | female, egsingle, layout = c(2,1), origin=0)
+```
+
+```{r bar_black, echo=FALSE}
+names(egsingle)
+barchart(year ~ grade | black, egsingle, layout = c(2,1), origin=0)
+```
+
+```{r bar_spanic, echo=FALSE}
+
+barchart(year ~ grade | hispanic, egsingle, layout = c(2,1), origin=0)
+```
+box-and-whisker plot
+```{r bw_, echo=FALSE}
+bwplot(year ~ female | factor(black), egsingle, layout = c(2,1))
+```
+
+
+```{r xy info, echo=FALSE}
+xyplot(grade ~ female | retained, data = egsingle, layout=c(4,1))
+
+```
+
+```{r xy scatter, echo=FALSE}
+xyplot(female ~ grade, data = egsingle, grid=TRUE,
+       abline = c(0,1))
+```
+Mmmec data set
+Malignant  Melanoma  Mortality  in  the  European  Community  associated  with  the  impact  of  UVradiation exposure
+```{r Mmmec description, echo=FALSE}
+dim(Mmmec)
+names(Mmmec)
+str(Mmmec)
+```
+Data set summary:
+```{r Mmmec summary, echo=FALSE}
+summary(Mmmec)
+```
+
+```{r hist_nation, echo=FALSE}
+histogram(~ nation, data=Mmmec)
+```
+Deaths among men in 9 countries
+```{r xyplot_mmmec, echo=FALSE}
+xyplot(nation ~ deaths, data=Mmmec)
+```
+
+```{r head_mmec, echo=FALSE}
+head(Mmmec)
+```
+
+Color by nation
+```{r xyplot_tri, echo=FALSE}
+xyplot(uvb ~ deaths, group=nation ,data=Mmmec, auto.key = TRUE)
+```
+
+Multiple panels by group
+```{r xyplot_panels, echo=FALSE}
+
+xyplot(uvb ~ deaths | nation,
+       group=nation, data = Mmmec, 
+      # type = c("p", "smooth"),
+       scales = "free")
+```
+
+Cloud - 3D
+```{r cloud1, echo=FALSE}
+cloud(uvb ~ uvb * deaths,
+       group=nation, data = Mmmec, 
+       auto.key = TRUE)
+```
+```{r cloud2, echo=FALSE}
+cloud(uvb ~ uvb * deaths,
+       group=nation, data = Mmmec)
+```
+
+```{r 3D, echo=FALSE}
+cloud(deaths ~ deaths * uvb,
+       group=nation, data = Mmmec)
+```
+
