@@ -1,0 +1,277 @@
+---
+title: "tigerstats package"
+output: html_document
+---
+
+```{r setup, echo=FALSE}
+library(knitr)
+library(tigerstats)
+library(tidyverse)
+#library(ggplot2)
+```
+## data from package ‘tigerstats’, (Dec 2016)
+
+imagpop dataset - imaginary population
+Dataset dimention, column names, dataset structure:
+```{r imagpop, echo=FALSE}
+dim(imagpop)
+names(imagpop)
+str(imagpop)
+summary(imagpop)
+```
+
+head
+```{r head imagpop, echo=FALSE}
+head(imagpop)
+```
+Base graphics histogram
+```{r hist imagpop, echo=FALSE}
+hist(imagpop$income)
+```
+
+ggplot2 histogram:
+```{r histgg imagpop, echo=FALSE}
+ggplot(imagpop, aes(x=income)) + geom_histogram()
+```
+
+```{r two_geoms imagpop, echo=FALSE}
+ggplot(imagpop, aes(x=income, y=height ,color=sex)) +
+  geom_point() + geom_smooth()
+```
+
+```{r one_geoms imagpop, echo=FALSE}
+  ggplot(imagpop, aes(x=height, y=income, color=sex)) +
+  geom_point() +
+```
+
+specifying the aesthetics inside the geoms
+```{r aes_in_geoms imagpop, echo=FALSE}
+ggplot(imagpop) + 
+         geom_point(aes(x=income, y=height ,color=sex)) +
+         geom_smooth(aes(x=income, y=height ,color=sex)) 
+```
+
+Opinion of death panalty by gender:
+```{r bar cappun gender, echo=FALSE}
+ggplot(imagpop, aes(x=cappun, fill=factor(sex))) +
+  geom_bar(stat="count", position="fill") +
+  scale_fill_brewer(palette="Paired")
+```
+
+Opinion of death panalty by income:
+```{r bar cappun income, echo=FALSE}
+ggplot(imagpop, aes(x=income, fill=factor(sex))) +
+  geom_bar(stat="count", position="fill") +
+  scale_fill_brewer(palette="Set1")
+```
+
+Opinion of death panalty by gender and income:
+```{r cappun 2 gender income, echo=FALSE}
+ggplot(imagpop, aes(x=cappun, y=income ,color=sex)) +
+  geom_area()
+```
+
+View on capital punnishment by income and gender
+```{r cappun 3 gender income, echo=FALSE}
+ggplot(imagpop)+
+  geom_boxplot(aes(x=cappun, y=income, fill=sex))+
+  scale_fill_brewer(palette="Dark2")
+```
+
+Violin plot:
+```{r cappun 4 gender income, echo=FALSE}
+ggplot(imagpop)+geom_violin(aes(x=cappun,y=income,fill=sex))+
+  scale_fill_brewer(palette="Set2")
+```
+
+```{r cappun 5 gender income, echo=FALSE}
+ggplot(imagpop)+geom_col(aes(x=cappun,y=income,fill=sex))+
+  scale_fill_brewer(palette="Accent")
+```
+Math and income 
+```{r cappun 6 gender income, echo=FALSE}
+ggplot(imagpop)+geom_bar(aes(x=height, y=income, fill=math),stat='identity') + 
+  scale_fill_brewer(palette="Set2")
+```
+
+```{r jitter1, echo=FALSE}
+cbPalette=c("blue","orange") # manual color setting
+ggplot() +
+     geom_jitter(data=imagpop, aes(math, income, colour = factor(sex)))+
+     scale_color_manual(values=cbPalette)
+```
+
+Math, height, cappun
+```{r jitter2, echo=FALSE}
+cbPalette=c("blue","orange") # manual color setting
+ggplot() +
+    geom_jitter(data=imagpop, aes(math, height, colour = factor(sex)))+
+    facet_grid(cappun ~ .) +
+    scale_color_manual(values=cbPalette) +
+    theme_dark()
+```
+
+Math, income, cappun
+```{r jitter3, echo=FALSE}
+myPalette=c("darkgreen","violet")
+ggplot(imagpop) +
+    geom_jitter( aes(math, income, colour = factor(sex)))+
+    facet_grid(cappun ~ .)+ 
+   scale_color_manual(values=myPalette) +
+    theme_linedraw()
+```
+
+```{r jitter4, echo=FALSE}
+ggplot(imagpop) +
+    geom_jitter( aes(cappun, income, colour = factor(sex)))+
+    facet_grid(math ~ .)+
+    scale_color_hue(l=30, c=55)+
+    theme_linedraw()
+```
+
+```{r jitter5, echo=FALSE}
+ggplot(imagpop, aes(x=cappun, y=income, factor=sex)) + 
+  geom_boxplot(notch = TRUE)+
+  geom_jitter(position=position_jitter(0.1))
+```
+
+```{r jitter6, echo=FALSE}
+ggplot(imagpop, aes(x=cappun, y=income, color=sex)) + 
+  geom_jitter(position=position_jitter(0.4))
+```
+
+library(tigerstats)
+dataset nonresponse - non-response to a mail survey in Demnark
+Basic info: dimention, names of colomns, head
+```{r nonresponse dataset, echo=FALSE}
+dim(nonresponse)
+names(nonresponse)
+head(nonresponse,2)
+```
+
+Histogram - residence: in Copenhagen, or a city outside of Copenhagen, or in thecountryside:
+```{r hist1 nonresponce, echo=FALSE}
+ggplot(nonresponse, aes(x=residence)) + geom_histogram(stat="count")
+```
+
+Histogram - residence:
+```{r hist2 nonresponce, echo=FALSE}
+ggplot(nonresponse, aes(x=residence)) + 
+  geom_histogram(binwidth = 10,
+  fill="gray",colour="black", 
+  stat="count")
+```
+
+Histogram - gendeer:
+```{r hist3 nonresponce, echo=FALSE}
+ggplot(nonresponse, aes(x=gender)) + 
+  geom_histogram(binwidth = 10,
+  fill="violet",colour="black", 
+  stat="count")
+```
+
+```{r j, echo=FALSE}
+ggplot(nonresponse) +
+    geom_jitter( aes(gender,response, colour = factor(residence)))+
+    theme_linedraw()
+```
+
+
+```{r j2, echo=FALSE}
+myPalette=c("darkgreen","violet", "blue")
+ggplot(nonresponse) +
+    geom_jitter( aes(gender,response, colour = factor(residence)))+
+   # facet_grid(gender ~ .)+ 
+   scale_color_manual(values=myPalette) +
+    theme_linedraw()
+```
+
+```{r j3, echo=FALSE}
+myPalette=c("darkgreen","purple", "blue")
+ggplot(nonresponse) +
+    geom_jitter( aes(gender, response, colour = factor(residence)))+
+   facet_grid(residence ~ .)+ 
+   scale_color_manual(values=myPalette) +
+    theme_linedraw()
+```
+
+deathpen dataset:
+Number of capital cases in Florida in 1976-1977 vs race of defendent and victim
+Dataset sescription: dimention, column names, head
+```{r descr, echo=FALSE}
+dim(deathpen)
+names(deathpen)
+head(deathpen,2)
+```
+Race of the defendent
+```{r hist_race, echo=FALSE}
+ggplot(deathpen, aes(x=defrace)) + 
+  geom_histogram(binwidth = 10,
+  fill="purple",colour="black", 
+  stat="count")
+```
+
+Race of the victim
+```{r hist_race, echo=FALSE}
+ggplot(deathpen, aes(x=vicrace)) + 
+  geom_histogram(binwidth = 10,
+  fill="purple",colour="black", 
+  stat="count")
+```
+
+
+Defendent race vs death or not
+```{r bar def race d, echo=FALSE}
+ggplot(deathpen, aes(x=defrace, fill=factor(death))) +
+  geom_bar(stat="count", position="fill") +
+  scale_fill_brewer(palette="Set2")
+```
+
+Victim race vs death or not
+```{r bar def race d, echo=FALSE}
+ggplot(deathpen, aes(x=vicrace, fill=factor(death))) +
+  geom_bar(stat="count", position="fill") +
+  scale_fill_brewer(palette="Set2")
+```
+
+tornado dataset showing tornado damage
+```{r tornado, echo=FALSE}
+dim(tornado)
+head(tornado)
+```
+
+Data summary
+```{r structure, echo=FALSE}
+summary(tornado)
+```
+
+Annual tornado damage > $50 mln
+```{r dam50, echo=FALSE}
+ggplot(filter(tornado, damage > 50),
+    aes(x=state, y=damage))+
+     geom_bar(stat='identity')
+```
+
+Damage < $0.3 mln, Dec 2016
+```{r filter damage, echo=FALSE}
+ggplot(filter(tornado, damage < 0.3),
+       aes(state,damage))+geom_bar(stat='identity')
+```
+
+Puerto Rico vs Nevada -  data from late 2016 
+```{r PuertoRico Nevada, echo=FALSE}
+tornado %>% filter(state == 'PuertoRico' | state == 'Nevada') %>%
+  ggplot(aes(state,damage)) + geom_bar(stat='identity')
+```
+
+States starting with P
+```{r P echo=FALSE}
+tornado %>% filter(str_detect(state,'^P')) %>%
+  ggplot(aes(state,damage)) + geom_bar(stat='identity')
+``` 
+  
+States containing 'north' 'south' - partial matching
+```{r partial matching echo=FALSE}
+tornado %>% filter(str_detect(state,"North|South")) %>%
+  ggplot(aes(state,damage)) + geom_bar(stat='identity')
+``` 

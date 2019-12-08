@@ -1,0 +1,126 @@
+---
+title: "ggplot2 mlmRev"
+output: html_document
+---
+
+```{r setup, echo=FALSE}
+library(knitr)
+library(mlmRev)
+library(tidyverse) # will get ggplot2
+```
+## data from package ‘mlmRev’
+
+Mmmec data set
+Malignant  Melanoma  Mortality  in  the  European  Community  associated  with  the  impact  of  UVradiation exposure.
+
+Column names:
+```{r Mmmec col names, echo=FALSE}
+names(Mmmec) 
+```
+2 rows from head:
+```{r Mmmec head-2, echo=FALSE}
+head(Mmmec, 2)
+```
+Data summary:
+```{r Mmmec summary, echo=FALSE}
+summary(Mmmec)
+```
+Histogram:
+```{r histgg mmmec, echo=FALSE}
+ggplot(Mmmec, aes(x=deaths)) + geom_histogram()
+```
+
+Histogram with adjustments:
+```{r histgg mmmec, echo=FALSE}
+ggplot(Mmmec, aes(x=deaths)) + geom_histogram(binwidth = 20,
+            fill="white",colour="black")
+```
+
+```{r bar6 uvb mmmec, echo=FALSE}
+ggplot(Mmmec, aes(x=nation, y=deaths)) + 
+       geom_bar(stat = "identity") # heights of the bars represent values in the data
+```
+
+Points, scatterplot for aech country number od deaths:
+```{r sc1 mmmec, echo=FALSE}
+ggplot(Mmmec, aes(x=deaths, y=nation)) + 
+       geom_point(color='darkblue')
+```
+
+Violin plot:
+```{r sc2 mmmec, echo=FALSE}
+ggplot(Mmmec, aes(x=nation, y=deaths)) + 
+       geom_violin()
+```
+
+UV radiation exposure in each country
+```{r sc3 uvb mmmec, echo=FALSE}
+ggplot(Mmmec, aes(x=deaths, y=nation)) + 
+       geom_point(aes(color=uvb))
+```
+
+```{r sc4 uvb mmmec, echo=FALSE}
+ggplot(Mmmec, aes(x=deaths, y=nation)) + 
+       geom_point(aes(color=uvb, size=nation))
+```
+
+Deaths in Belgium and Italy and uvb exposure
+```{r deaths uvb in 2 countries mmmec, echo=FALSE}
+ggplot(filter(Mmmec, nation %in% c("Belgium","Italy")),
+              aes(x=deaths, y=uvb, color=nation)) + 
+              geom_point()
+```
+
+```{r uvb deaths in 2 countries mmmec, echo=FALSE}
+ggplot(filter(Mmmec, nation %in% c("Belgium","Italy")),
+              aes(x=uvb, y=deaths,
+              color=nation)) + geom_point()
+```
+
+France and Italy
+```{r uvb deaths in Fr It mmmec, echo=FALSE}
+ggplot(filter(Mmmec, nation %in% c("France","Italy")),
+              aes(x=uvb, y=deaths, color=nation)) + 
+              geom_point()
+```
+
+geom_text 
+```{r uvb deaths in 2 countries text, echo=FALSE}
+ggplot(filter(Mmmec, nation %in% c("Denmark","Luxembourg")),
+              aes(x=uvb, y=deaths, color=nation)) + 
+                geom_point() +
+                geom_text(aes(label=region), size = 6)
+```
+
+in regions in France 
+```{r uvb deaths region, echo=FALSE}
+ggplot(filter(Mmmec, nation %in% c("France")),
+              aes(x=uvb, y=deaths, color=nation)) + 
+                geom_point(aes(color=region)) 
+```
+
+in regions of Luxembourg
+```{r uvb deaths Lux region, echo=FALSE}
+ggplot(filter(Mmmec, nation %in% c("Luxembourg")),
+              aes(x=uvb, y=deaths, color=nation)) + 
+                geom_point(aes(color=region, shape=county)) 
+```
+
+Luxembourg and Danmark 
+```{r uvb deaths in 2 ggrepel, echo=FALSE}
+library(ggrepel)
+ggplot(filter(Mmmec, nation %in% c("Denmark","Luxembourg")),
+              aes(x=uvb, y=deaths, color=nation)) + 
+                geom_point() +
+                geom_text_repel(aes(label=region), size = 6)
+```
+
+
+```{r uvb deaths Den Lux, echo=FALSE}
+ggplot(filter(Mmmec, nation %in% c("Denmark","Luxembourg")),
+              aes(x=uvb, y=deaths)) + 
+                geom_point(aes(color=nation, size=deaths)) 
+```
+
+
+
